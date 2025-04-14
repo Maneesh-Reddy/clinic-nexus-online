@@ -1,4 +1,3 @@
-
 import { DashboardLayout } from '../components/Layout';
 import { Users, UserCog, Calendar, Pill, CreditCard, TrendingUp, BarChart3, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -246,13 +245,16 @@ const AdminDashboard = () => {
       
       {/* Quick Actions */}
       <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Link to="/admin/doctors/add" className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-4 rounded-lg flex items-center gap-3 transition-colors border border-blue-100 dark:border-blue-800">
+        <Link 
+          to="/admin/doctors" 
+          className="bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 p-4 rounded-lg flex items-center gap-3 transition-colors border border-blue-100 dark:border-blue-800"
+        >
           <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
             <UserCog size={20} />
           </div>
           <div>
-            <h3 className="font-medium text-blue-800 dark:text-blue-300">Add New Doctor</h3>
-            <p className="text-xs text-blue-600 dark:text-blue-400">Register a new healthcare provider</p>
+            <h3 className="font-medium text-blue-800 dark:text-blue-300">Manage Doctors</h3>
+            <p className="text-xs text-blue-600 dark:text-blue-400">View and manage healthcare providers</p>
           </div>
         </Link>
         

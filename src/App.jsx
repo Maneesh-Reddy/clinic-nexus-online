@@ -1,4 +1,3 @@
-
 import { Toaster } from "./components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -13,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import PatientDashboard from "./pages/PatientDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import DoctorsManagement from "./pages/admin/DoctorsManagement";  // New import
 
 // Patient page imports
 import Appointments from "./pages/patient/Appointments";
@@ -118,14 +118,6 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            <Route 
-              path="/doctor/*" 
-              element={
-                <ProtectedRoute requiredRole="doctor">
-                  <DoctorDashboard />
-                </ProtectedRoute>
-              }
-            />
             
             {/* Admin routes */}
             <Route 
@@ -137,12 +129,12 @@ const App = () => (
               } 
             />
             <Route 
-              path="/admin/*" 
+              path="/admin/doctors" 
               element={
                 <ProtectedRoute requiredRole="admin">
-                  <AdminDashboard />
+                  <DoctorsManagement />
                 </ProtectedRoute>
-              }
+              } 
             />
             
             {/* Catch-all route - 404 */}
