@@ -1,26 +1,69 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { DashboardLayout } from '../../components/Layout';
-import { Calendar, Clock, Plus } from 'lucide-react';
+import { Calendar, Clock, Plus, Search, X, Check, FileText, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Button } from '../../components/ui/button';
+import { Input } from '../../components/ui/input';
+import BookAppointmentModal from '../../components/BookAppointmentModal';
+import { useToast } from '../../hooks/use-toast';
 
 const Appointments = () => {
-  // Mock data
-  const upcomingAppointments = [
+  const [upcomingAppointments, setUpcomingAppointments] = useState([
     { id: 1, doctor: 'Dr. Sarah Johnson', specialty: 'Cardiologist', date: '2025-04-20', time: '10:00 AM', status: 'confirmed' },
     { id: 2, doctor: 'Dr. Robert Chen', specialty: 'Dermatologist', date: '2025-04-25', time: '2:30 PM', status: 'pending' },
     { id: 3, doctor: 'Dr. Maria Gonzalez', specialty: 'Neurologist', date: '2025-05-02', time: '11:15 AM', status: 'confirmed' },
-  ];
+  ]);
   
-  const pastAppointments = [
+  const [pastAppointments, setPastAppointments] = useState([
     { id: 101, doctor: 'Dr. Sarah Johnson', specialty: 'Cardiologist', date: '2025-03-15', time: '10:00 AM', status: 'completed' },
     { id: 102, doctor: 'Dr. James Wilson', specialty: 'General Physician', date: '2025-02-20', time: '3:45 PM', status: 'completed' },
-  ];
+  ]);
+
+  const [showBookModal, setShowBookModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const { toast } = useToast();
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
+
+  const handleCancelAppointment = (id) => {
+    setUpcomingAppointments(
+      upcomingAppointments.filter(appointment => appointment.id !== id)
+    );
+    toast({
+      title: "Appointment Cancelled",
+      description: "Your appointment has been successfully cancelled.",
+      variant: "default",
+    });
+  };
+  
+  const handleAddAppointment = (newAppointment) => {
+    // Generate a new ID
+    const newId = Math.max(...upcomingAppointments.map(a => a.id), 0) + 1;
+    
+    // Add new appointment with pending status
+    setUpcomingAppointments([
+      ...upcomingAppointments, 
+      { ...newAppointment, id: newId, status: 'pending' }
+    ]);
+    
+    setShowBookModal(false);
+    
+    toast({
+      title: "Appointment Requested",
+      description: "Your appointment request has been submitted and is pending confirmation.",
+      variant: "default",
+    });
+  };
+
+  // Filter appointments based on search term
+  const filteredUpcoming = upcomingAppointments.filter(appointment => 
+    appointment.doctor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    appointment.specialty.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <DashboardLayout>
@@ -29,10 +72,24 @@ const Appointments = () => {
           <h1 className="text-3xl font-bold">Appointments</h1>
           <p className="text-gray-600 dark:text-gray-400">Manage your appointments</p>
         </div>
-        <button className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-clinic-600 text-white rounded-md hover:bg-clinic-700 transition-colors">
+        <Button className="mt-4 md:mt-0" onClick={() => setShowBookModal(true)}>
           <Plus size={16} />
           <span>Book New Appointment</span>
-        </button>
+        </Button>
+      </div>
+
+      {/* Search bar */}
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
+          <Input
+            type="search"
+            placeholder="Search appointments by doctor or specialty..."
+            className="pl-9"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
       {/* Upcoming Appointments */}
@@ -45,9 +102,9 @@ const Appointments = () => {
         </div>
         
         <div className="p-4">
-          {upcomingAppointments.length > 0 ? (
+          {filteredUpcoming.length > 0 ? (
             <div className="space-y-4">
-              {upcomingAppointments.map((appointment) => (
+              {filteredUpcoming.map((appointment) => (
                 <div key={appointment.id} className="flex items-start p-3 rounded-lg border border-gray-100 dark:border-gray-700">
                   <div className="w-10 h-10 rounded-full bg-clinic-100 dark:bg-clinic-900/30 flex items-center justify-center text-clinic-600 dark:text-clinic-400 mr-3 shrink-0">
                     <Clock size={20} />
@@ -68,12 +125,23 @@ const Appointments = () => {
                       <p>{formatDate(appointment.date)} at {appointment.time}</p>
                     </div>
                     <div className="mt-3 flex items-center gap-2">
-                      <button className="text-xs px-3 py-1.5 bg-clinic-50 text-clinic-600 dark:bg-clinic-900/20 dark:text-clinic-400 hover:bg-clinic-100 dark:hover:bg-clinic-900/30 rounded">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="text-xs px-3 py-1.5 flex items-center gap-1"
+                      >
+                        <FileText size={14} />
                         View Details
-                      </button>
-                      <button className="text-xs px-3 py-1.5 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 rounded">
+                      </Button>
+                      <Button 
+                        variant="destructive" 
+                        size="sm" 
+                        className="text-xs px-3 py-1.5 flex items-center gap-1"
+                        onClick={() => handleCancelAppointment(appointment.id)}
+                      >
+                        <X size={14} />
                         Cancel
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -81,10 +149,18 @@ const Appointments = () => {
             </div>
           ) : (
             <div className="text-center py-6">
-              <p className="text-gray-500 dark:text-gray-400">No upcoming appointments</p>
-              <button className="mt-2 text-sm text-clinic-600 hover:text-clinic-700 dark:text-clinic-400 dark:hover:text-clinic-300">
-                Book an appointment
-              </button>
+              <p className="text-gray-500 dark:text-gray-400">
+                {searchTerm ? "No appointments match your search" : "No upcoming appointments"}
+              </p>
+              {searchTerm ? (
+                <Button variant="link" onClick={() => setSearchTerm('')}>
+                  Clear search
+                </Button>
+              ) : (
+                <Button variant="link" onClick={() => setShowBookModal(true)}>
+                  Book an appointment
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -126,9 +202,9 @@ const Appointments = () => {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <button className="text-xs px-2 py-1 text-clinic-600 hover:text-clinic-700 dark:text-clinic-400 dark:hover:text-clinic-300">
+                        <Button variant="link" className="text-xs p-0 h-auto">
                           View Details
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -142,6 +218,14 @@ const Appointments = () => {
           )}
         </div>
       </div>
+
+      {/* Book Appointment Modal */}
+      {showBookModal && (
+        <BookAppointmentModal 
+          onClose={() => setShowBookModal(false)} 
+          onSave={handleAddAppointment}
+        />
+      )}
     </DashboardLayout>
   );
 };
