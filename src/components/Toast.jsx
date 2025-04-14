@@ -1,88 +1,69 @@
 
-import { createContext, useContext, useState, useCallback } from 'react';
-import { X } from 'lucide-react';
+import React, { createContext, useContext, useState } from "react";
 
 const ToastContext = createContext();
 
-export function ToastProvider({ children }) {
+export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = useCallback(({ type = 'default', title, message, duration = 5000 }) => {
+  const addToast = (toast) => {
     const id = Math.random().toString(36).substring(2, 9);
+    const newToast = { id, ...toast };
     
-    setToasts((prevToasts) => [...prevToasts, { id, type, title, message }]);
-    
-    if (duration !== Infinity) {
-      setTimeout(() => {
-        removeToast(id);
-      }, duration);
-    }
-    
-    return id;
-  }, []);
-  
-  const removeToast = useCallback((id) => {
-    setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
-  }, []);
+    setToasts((currentToasts) => [...currentToasts, newToast]);
+
+    // Auto-dismiss after 5 seconds
+    setTimeout(() => {
+      dismissToast(newToast.id);
+    }, 5000);
+  };
+
+  const dismissToast = (id) => {
+    setToasts((currentToasts) => 
+      currentToasts.filter((toast) => toast.id !== id)
+    );
+  };
 
   return (
-    <ToastContext.Provider value={{ addToast, removeToast }}>
+    <ToastContext.Provider value={{ toasts, addToast, dismissToast }}>
       {children}
-      <div className="fixed bottom-0 right-0 p-4 space-y-4 z-50 max-w-md w-full">
+      <div className="fixed bottom-0 right-0 p-4 w-full md:max-w-sm z-50 space-y-2">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`animate-fade-in rounded-lg shadow-lg p-4 flex items-start border ${
-              toast.type === 'success'
-                ? 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800'
-                : toast.type === 'error'
-                ? 'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800'
-                : toast.type === 'warning'
-                ? 'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800'
-                : toast.type === 'info'
-                ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800'
-                : 'bg-white border-gray-200 dark:bg-gray-800 dark:border-gray-700'
+            className={`rounded-lg border p-4 shadow-md transition-all duration-300 ease-in-out transform translate-y-0 bg-card text-card-foreground ${
+              toast.type === "error" ? "border-red-500" : 
+              toast.type === "success" ? "border-green-500" : 
+              toast.type === "warning" ? "border-yellow-500" : "border-border"
             }`}
           >
-            <div className="flex-1 mr-2">
-              {toast.title && (
-                <h4 className={`font-medium ${
-                  toast.type === 'success'
-                    ? 'text-green-800 dark:text-green-400'
-                    : toast.type === 'error'
-                    ? 'text-red-800 dark:text-red-400'
-                    : toast.type === 'warning'
-                    ? 'text-yellow-800 dark:text-yellow-400'
-                    : toast.type === 'info'
-                    ? 'text-blue-800 dark:text-blue-400'
-                    : 'text-gray-900 dark:text-gray-100'
-                }`}>
-                  {toast.title}
-                </h4>
-              )}
-              {toast.message && (
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                  {toast.message}
-                </p>
-              )}
+            <div className="flex justify-between items-start">
+              <div>
+                {toast.title && (
+                  <h5 className="font-medium mb-1">{toast.title}</h5>
+                )}
+                {toast.message && (
+                  <p className="text-sm text-muted-foreground">{toast.message}</p>
+                )}
+              </div>
+              <button
+                onClick={() => dismissToast(toast.id)}
+                className="ml-4 text-muted-foreground hover:text-foreground"
+              >
+                ×
+              </button>
             </div>
-            <button
-              onClick={() => removeToast(toast.id)}
-              className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
-            >
-              <X size={18} />
-            </button>
           </div>
         ))}
       </div>
     </ToastContext.Provider>
   );
-}
+};
 
 export const useToast = () => {
   const context = useContext(ToastContext);
-  if (context === undefined) {
-    throw new Error('useToast must be used within a ToastProvider');
+  if (!context) {
+    throw new Error("useToast must be used within a ToastProvider");
   }
   return context;
 };
