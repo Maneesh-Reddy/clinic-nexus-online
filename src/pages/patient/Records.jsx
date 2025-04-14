@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { DashboardLayout } from '../../components/Layout';
-import { FileText, Search, Download, Eye, Calendar } from 'lucide-react';
+import { FileText, Search, Download, Eye, Calendar, X } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { useToast } from '../../hooks/use-toast';
