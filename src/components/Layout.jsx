@@ -1,7 +1,8 @@
 
 import React from "react";
 import { useTheme } from "./ThemeProvider";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Calendar, FileText, Pill, CreditCard, UserCog, Home } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export const MainLayout = ({ children }) => {
   return (
@@ -11,8 +12,49 @@ export const MainLayout = ({ children }) => {
   );
 };
 
-export const DashboardLayout = ({ children, sidebarContent }) => {
+export const DashboardLayout = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
+  
+  // Navigation items for the sidebar
+  const navItems = [
+    { 
+      title: "Dashboard", 
+      icon: <Home size={20} />, 
+      path: "/patient", 
+      active: location.pathname === "/patient" 
+    },
+    { 
+      title: "Appointments", 
+      icon: <Calendar size={20} />, 
+      path: "/patient/appointments", 
+      active: location.pathname === "/patient/appointments" 
+    },
+    { 
+      title: "Medical Records", 
+      icon: <FileText size={20} />, 
+      path: "/patient/records", 
+      active: location.pathname === "/patient/records" 
+    },
+    { 
+      title: "Prescriptions", 
+      icon: <Pill size={20} />, 
+      path: "/patient/prescriptions", 
+      active: location.pathname === "/patient/prescriptions" 
+    },
+    { 
+      title: "Billing", 
+      icon: <CreditCard size={20} />, 
+      path: "/patient/billing", 
+      active: location.pathname === "/patient/billing" 
+    },
+    { 
+      title: "Profile", 
+      icon: <UserCog size={20} />, 
+      path: "/patient/profile", 
+      active: location.pathname === "/patient/profile" 
+    }
+  ];
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
@@ -31,7 +73,27 @@ export const DashboardLayout = ({ children, sidebarContent }) => {
             )}
           </button>
         </div>
-        <div className="p-4">{sidebarContent}</div>
+        
+        {/* Navigation Menu */}
+        <nav className="p-3">
+          <ul className="space-y-1">
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <Link 
+                  to={item.path}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                    item.active 
+                      ? 'bg-clinic-100 text-clinic-600 dark:bg-clinic-900/30 dark:text-clinic-400 font-medium' 
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  {item.icon}
+                  <span>{item.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
 
       {/* Main Content */}

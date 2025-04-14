@@ -1,6 +1,6 @@
 
 import { DashboardLayout } from '../components/Layout';
-import { CalendarDays, FileText, Pill, CreditCard, Clock, UserCog, Calendar } from 'lucide-react';
+import { CalendarDays, FileText, Pill, Clock, UserCog } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const PatientDashboard = () => {
@@ -25,49 +25,6 @@ const PatientDashboard = () => {
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Patient Dashboard</h1>
         <p className="text-gray-600 dark:text-gray-400">Welcome back, John. Here's an overview of your health.</p>
-      </div>
-      
-      {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <Link to="/patient/appointments" className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 hover:shadow-md transition-shadow">
-          <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
-            <Calendar size={20} />
-          </div>
-          <div>
-            <h3 className="font-medium">Book Appointment</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Schedule a visit</p>
-          </div>
-        </Link>
-        
-        <Link to="/patient/records" className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 hover:shadow-md transition-shadow">
-          <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400">
-            <FileText size={20} />
-          </div>
-          <div>
-            <h3 className="font-medium">Medical Records</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">View your history</p>
-          </div>
-        </Link>
-        
-        <Link to="/patient/prescriptions" className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 hover:shadow-md transition-shadow">
-          <div className="w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400">
-            <Pill size={20} />
-          </div>
-          <div>
-            <h3 className="font-medium">Prescriptions</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">View & refill</p>
-          </div>
-        </Link>
-        
-        <Link to="/patient/billing" className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-center gap-3 hover:shadow-md transition-shadow">
-          <div className="w-10 h-10 rounded-full bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 dark:text-yellow-400">
-            <CreditCard size={20} />
-          </div>
-          <div>
-            <h3 className="font-medium">Billing</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Manage payments</p>
-          </div>
-        </Link>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

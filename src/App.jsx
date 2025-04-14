@@ -14,6 +14,13 @@ import PatientDashboard from "./pages/PatientDashboard";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 
+// Patient page imports
+import Appointments from "./pages/patient/Appointments";
+import Records from "./pages/patient/Records";
+import Prescriptions from "./pages/patient/Prescriptions";
+import Billing from "./pages/patient/Billing";
+import Profile from "./pages/patient/Profile";
+
 // Create a client
 const queryClient = new QueryClient();
 
@@ -62,10 +69,42 @@ const App = () => (
               } 
             />
             <Route 
-              path="/patient/*" 
+              path="/patient/appointments" 
               element={
                 <ProtectedRoute requiredRole="patient">
-                  <PatientDashboard />
+                  <Appointments />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/patient/records" 
+              element={
+                <ProtectedRoute requiredRole="patient">
+                  <Records />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/patient/prescriptions" 
+              element={
+                <ProtectedRoute requiredRole="patient">
+                  <Prescriptions />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/patient/billing" 
+              element={
+                <ProtectedRoute requiredRole="patient">
+                  <Billing />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/patient/profile" 
+              element={
+                <ProtectedRoute requiredRole="patient">
+                  <Profile />
                 </ProtectedRoute>
               }
             />
