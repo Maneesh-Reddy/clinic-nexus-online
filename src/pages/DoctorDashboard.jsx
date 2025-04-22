@@ -1,3 +1,4 @@
+
 import { DashboardLayout } from '../components/Layout';
 import { Users, Calendar, Clock, UserCheck, Activity, CalendarDays, CheckCircle2, XCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -17,10 +18,10 @@ const DoctorDashboard = () => {
   ]);
 
   const patientStats = [
-    { label: 'Total Patients', value: '145', icon: require("lucide-react").Users, color: 'blue' },
-    { label: "Today's Appointments", value: "8", icon: require("lucide-react").Calendar, color: 'green' },
-    { label: 'Pending Reviews', value: '12', icon: require("lucide-react").Clock, color: 'yellow' },
-    { label: 'Completed This Week', value: '32', icon: require("lucide-react").CheckCircle2, color: 'purple' },
+    { label: 'Total Patients', value: '145', icon: Users, color: 'blue' },
+    { label: "Today's Appointments", value: "8", icon: Calendar, color: 'green' },
+    { label: 'Pending Reviews', value: '12', icon: Clock, color: 'yellow' },
+    { label: 'Completed This Week', value: '32', icon: CheckCircle2, color: 'purple' },
   ];
 
   const recentPatients = [
@@ -86,7 +87,7 @@ const DoctorDashboard = () => {
         <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              {require("lucide-react").CalendarDays({ className: "text-clinic-600 dark:text-clinic-400", size: 20 })}
+              <CalendarDays className="text-clinic-600 dark:text-clinic-400" size={20} />
               <h2 className="font-semibold text-lg">Today's Appointments</h2>
             </div>
             <a
@@ -102,7 +103,7 @@ const DoctorDashboard = () => {
                 {appointments.filter(app => app.status === "confirmed").map((appointment) => (
                   <div key={appointment.id} className="flex items-start p-3 rounded-lg border border-gray-100 dark:border-gray-700">
                     <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mr-3 shrink-0">
-                      {require("lucide-react").UserCheck({ size: 20 })}
+                      <UserCheck size={20} />
                     </div>
                     <div className="flex-1">
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
@@ -166,7 +167,7 @@ const DoctorDashboard = () => {
         </div>
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
           <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-2">
-            {require("lucide-react").Activity({ className: "text-clinic-600 dark:text-clinic-400", size: 20 })}
+            <Activity className="text-clinic-600 dark:text-clinic-400" size={20} />
             <h2 className="font-semibold text-lg">Your Stats</h2>
           </div>
           <div className="p-4">
@@ -218,7 +219,7 @@ const DoctorDashboard = () => {
       <div className="mt-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <div className="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
           <div className="flex items-center gap-2">
-            {require("lucide-react").Users({ className: "text-clinic-600 dark:text-clinic-400", size: 20 })}
+            <Users className="text-clinic-600 dark:text-clinic-400" size={20} />
             <h2 className="font-semibold text-lg">Recent Patients</h2>
           </div>
           <a
