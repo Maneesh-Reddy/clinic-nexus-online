@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { MainLayout } from '../components/Layout';
@@ -11,41 +10,38 @@ const Login = () => {
   const { addToast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const [role, setRole] = useState("patient");
+
   const { register, handleSubmit, formState: { errors } } = useForm();
-  
+
   const onSubmit = async (data) => {
     setIsLoading(true);
-    
-    // Simulating API call
+
     setTimeout(() => {
       setIsLoading(false);
-      
-      // Mock successful login
-      const role = data.email.includes('admin') ? 'admin' : 
-                 data.email.includes('doctor') ? 'doctor' : 'patient';
-                 
-      // Store token and role (in a real app this would come from the backend)
+
+      const loginRole =
+        data.email.includes('admin') ? 'admin' : role;
+
       localStorage.setItem('token', 'fake-jwt-token');
-      localStorage.setItem('userRole', role);
-      
-      addToast({ 
-        type: 'success', 
-        title: 'Login successful', 
+      localStorage.setItem('userRole', loginRole);
+
+      addToast({
+        type: 'success',
+        title: 'Login successful',
         message: 'Welcome back to Virtual Clinic!'
       });
-      
-      // Redirect based on role
-      const redirectPath = role === 'admin' ? '/admin' : 
-                          role === 'doctor' ? '/doctor' : '/patient';
+
+      const redirectPath = loginRole === 'admin' ? '/admin' :
+        loginRole === 'doctor' ? '/doctor' : '/patient';
       navigate(redirectPath);
     }, 1500);
   };
-  
+
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
   return (
     <MainLayout>
       <div className="container-custom py-12">
@@ -57,8 +53,30 @@ const Login = () => {
             <h1 className="text-3xl font-bold title-gradient">Virtual Clinic</h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">Sign in to your account</p>
           </div>
-          
+
           <div className="bg-card rounded-lg border p-6 shadow-sm">
+            <div className="mb-4 flex justify-center gap-8">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="patient"
+                  checked={role === 'patient'}
+                  onChange={() => setRole("patient")}
+                  className="accent-clinic-600"
+                />
+                <span>Patient</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  value="doctor"
+                  checked={role === 'doctor'}
+                  onChange={() => setRole("doctor")}
+                  className="accent-clinic-600"
+                />
+                <span>Doctor</span>
+              </label>
+            </div>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium mb-1">
@@ -71,7 +89,7 @@ const Login = () => {
                     errors.email ? 'border-red-500' : 'border-input'
                   } bg-background`}
                   placeholder="example@email.com"
-                  {...register('email', { 
+                  {...register('email', {
                     required: 'Email is required',
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -83,7 +101,7 @@ const Login = () => {
                   <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
                 )}
               </div>
-              
+
               <div>
                 <label htmlFor="password" className="block text-sm font-medium mb-1">
                   Password
@@ -110,7 +128,7 @@ const Login = () => {
                   <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
                 )}
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
@@ -126,7 +144,7 @@ const Login = () => {
                   Forgot password?
                 </a>
               </div>
-              
+
               <button
                 type="submit"
                 disabled={isLoading}
@@ -135,7 +153,6 @@ const Login = () => {
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
-            
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 Don't have an account?{' '}
@@ -144,7 +161,6 @@ const Login = () => {
                 </Link>
               </p>
             </div>
-            
             <div className="mt-6">
               <p className="text-xs text-center text-gray-500 dark:text-gray-400">
                 By signing in, you agree to our{' '}
@@ -153,7 +169,6 @@ const Login = () => {
               </p>
             </div>
           </div>
-          
           <div className="text-center mt-6">
             <Link to="/" className="text-sm text-gray-600 dark:text-gray-400 hover:text-clinic-600 dark:hover:text-clinic-400">
               ← Back to home
