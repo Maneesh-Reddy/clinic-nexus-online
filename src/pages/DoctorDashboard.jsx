@@ -1,15 +1,16 @@
 
 import React from "react";
-import DashboardHeader from "../components/doctor/DashboardHeader";
-import MainContent from "../components/doctor/MainContent";
+import { DashboardLayout } from "../components/Layout";
+import { DoctorDashboardHeader } from "../components/doctor/DashboardHeader";
+import { DoctorMainContent } from "../components/doctor/MainContent";
 
 const DoctorDashboard = () => {
   console.log("Rendering DoctorDashboard");
   return (
-    <div>
-      <DashboardHeader />
-      <MainContent />
-    </div>
+    <DashboardLayout>
+      <DoctorDashboardHeader />
+      <DoctorMainContent />
+    </DashboardLayout>
   );
 };
 
